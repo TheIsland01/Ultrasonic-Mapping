@@ -1,0 +1,32 @@
+from mindstorms import MSHub, Motor, MotorPair, ColorSensor, DistanceSensor, App
+from mindstorms.control import wait_for_seconds, wait_until, Timer
+from mindstorms.operator import greater_than, greater_than_or_equal_to, less_than, less_than_or_equal_to, equal_to, not_equal_to
+import math
+
+# Create your objects here.
+hub = MSHub()
+MotorA = Motor('A')
+MotorB = Motor('F')
+distance_sensor = DistanceSensor('D')
+
+# Calibrate all sensors:
+MotorA.run_to_position(0,'shortest path', 10)
+MotorB.run_to_position(0,'shortest path', 10)
+
+# rotational motor moves to starting position
+MotorA.run_to_position(180,'counterclockwise', 5)
+
+# Program starts here:
+hub.speaker.beep()
+while hub.left_button.is_pressed() != True:
+    
+    # Mathematical variables
+    theta = math.radians(MotorA.get_position())
+    phi = MotorB.get_position()
+    r = distance_sensor.get_distance_cm()
+
+    #increment
+    MotorA.run_for_degrees(5)
+    x_coord = str(r*(math.sin(theta)))
+    y_coord = str(r*(math.cos(theta)))
+    print("(" + x_coord + " , " +y_coord + ")")
